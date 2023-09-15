@@ -85,13 +85,6 @@ namespace simple_class
             srand(time(nullptr));
 	    int p = rand()%101;
 	    double cnt = (int) (this->probabilities[0]*100);
-	    //std::copy(this->probabilities, this->probabilities + 6, buf);
-	    //std::sort(buf, buf + 6, std::greater<double>());
-	   /*for (int i=0; i<6; i++)
-	   {
-		std::cout<<buf[i]<<" ";
-	   }
-	   std::cout<<std::endl; */
 	    for (int i = 0; i<6; i++)
 	    {
 		if (this->probabilities[i] != 0 && cnt > p)
@@ -104,9 +97,14 @@ namespace simple_class
 			cnt += (int) (this->probabilities[i+1]*100);
 		}
 	    }
-	    /*delete[] buf;
-	    buf = nullptr;*/
         }
+
+	bool operator = (const Dice &other) const
+	{
+		if (this->value == other.value)
+			return true;
+		return false;
+	}
 
         double get_probability(int num) //изменение значения вероятности выпадения числа
         {
@@ -127,6 +125,38 @@ namespace simple_class
                 	sum -= cur;
         	}
         }
+
+	void ascii_art()
+	{
+		std::cout << ".-------.\n";
+		std::cout << "|       |\n";
+		if (this->value == 1)
+		{
+			std::cout << "|   *   |\n";
+		}
+		else if (this->value == 2)
+		{
+                        std::cout << "|  **   |\n";
+		}
+		else if (this->value == 3)
+		{
+                        std::cout << "|  ***  |\n";
+		}
+		else if (this->value == 4)
+		{
+			std::cout << "| ****  |\n";
+		}
+		else if (this->value == 5)
+		{
+			std::cout << "| ***** |\n";
+		}
+		else if (this->value == 6)
+		{
+			std::cout << "| ******|\n";
+		}
+ 		std::cout << "|       |\n";
+		std::cout << "'-------'\n";
+	}
 
         void print() //вывод состояния игральной кости
         {

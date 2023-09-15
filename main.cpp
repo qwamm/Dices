@@ -7,9 +7,10 @@ int invite();
 int D_Init (Dice &d);
 int D_Random_Value (Dice &d);
 int D_Generation_based_on_probabilities (Dice &d);
+int D_Art (Dice &d);
 int D_Print (Dice &d);
 
-int (*f[])(Dice&) = {NULL, D_Init, D_Random_Value, D_Generation_based_on_probabilities};
+int (*f[])(Dice&) = {NULL, D_Init, D_Random_Value, D_Generation_based_on_probabilities, D_Art};
 
 int main()
 {
@@ -20,6 +21,20 @@ int main()
 		break;
     D_Print(d);
     std::cout<<"That's all. Good luck!\n";
+}
+
+int D_Art (Dice &d)
+{
+	try
+	{
+		d.ascii_art();
+	}
+	catch(...)
+	{
+		throw;
+		return 0;
+	}
+	return 1;
 }
 
 int D_Print (Dice &d)
@@ -58,7 +73,6 @@ int D_Random_Value (Dice &d)
 	}
 	catch(...)
 	{
-		throw;
 		return 0;
 	}
 	return 1;
@@ -85,12 +99,12 @@ int invite()
         std::cout << " 1. Initialization with the side dropped out and probabilities of dropping sides:\n";
         std::cout << " 2. Initialization with the random side\n";
         std::cout << " 3. Generating a random value for a dice based on probability\n";
-        std::cout << " 4. Compare two dices\n";
-        std::cout << " 5. ASCII-art\n";
+        std::cout << " 4. ASCII-art\n";
+        std::cout << " 5. Compare two dices\n";
 	int rc;
 	try
 	{
-        	rc = getNum<int>(0,3);
+        	rc = getNum<int>(0,4);
 	}
 	catch(...)
 	{
