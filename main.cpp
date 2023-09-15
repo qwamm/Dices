@@ -9,6 +9,7 @@ int D_Random_Value (Dice &d);
 int D_Generation_based_on_probabilities (Dice &d);
 int D_Art (Dice &d);
 int D_Print (Dice &d);
+int D_Compare (Dice &a, Dice &b);
 
 int (*f[])(Dice&) = {NULL, D_Init, D_Random_Value, D_Generation_based_on_probabilities, D_Art};
 
@@ -17,10 +18,34 @@ int main()
     int rc;
     Dice d;
     while (rc = invite())
-	if (!f[rc](d))
-		break;
+	{
+		if (rc == 5)
+		{
+			Dice second;
+			second.set_state();
+			D_Compare(d, second) == 1 ? std::cout<<"Dices are equal\n" : std::cout<<"Dices aren't equal\n";
+		}
+		else
+		{
+			if (!f[rc](d))
+                		break;
+		}
+	}
     D_Print(d);
     std::cout<<"That's all. Good luck!\n";
+}
+
+int D_Compare (Dice &a, Dice &b)
+{
+	try
+	{
+		return a==b ? 1 : 0;
+	}
+	catch(...)
+	{
+		throw;
+	}
+	return 1;
 }
 
 int D_Art (Dice &d)
@@ -104,7 +129,7 @@ int invite()
 	int rc;
 	try
 	{
-        	rc = getNum<int>(0,4);
+        	rc = getNum<int>(0,5);
 	}
 	catch(...)
 	{

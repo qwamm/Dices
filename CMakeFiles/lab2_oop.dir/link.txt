@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra CMakeFiles/lab2_oop.dir/main.cpp.o -o lab2_oop  liblab2.a 

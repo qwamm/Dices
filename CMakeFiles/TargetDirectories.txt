@@ -1,0 +1,4 @@
+/home/students/a/afonin.is/Dices/CMakeFiles/lab2.dir
+/home/students/a/afonin.is/Dices/CMakeFiles/lab2_oop.dir
+/home/students/a/afonin.is/Dices/CMakeFiles/edit_cache.dir
+/home/students/a/afonin.is/Dices/CMakeFiles/rebuild_cache.dir

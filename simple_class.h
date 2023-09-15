@@ -28,6 +28,8 @@ namespace simple_class
             }
             else if (a>=min && a<=max)
                 return a;
+	    else
+		std:: cout << "You are wrong! Repeat, please\n";
         }
     }
 
@@ -36,9 +38,9 @@ namespace simple_class
     {
     private:
         int value;
-        double probabilities[6];
+        double probabilities[6]; //static параметр
     public:
-        Dice() //конструктор по умолчанию
+        Dice() //конструктор по умолчанию (передавать выпавшее занчение) (инициализация перед основным конструктором вместо
         {
             this->value = 3;
             for (int i=0; i<6; i++)
@@ -57,7 +59,7 @@ namespace simple_class
         {
             std::cout << "The dice was deleted" << std::endl;
         }
-        void set_val (const int &cur_value) //изменение текущего значения игральной кости
+        void set_val (const int &cur_value) //изменение текущего значения игральной кости (сеттеры и геттеры должны переместиться в cpp-фвйл)
         {
             this->value = cur_value;
         }
@@ -70,7 +72,7 @@ namespace simple_class
             return this->value;
         }
 
-        void set_random()
+        void set_random() //переделать в виде конструктора
         {
             srand(time(nullptr));
             this->value = rand()%6;
@@ -99,10 +101,17 @@ namespace simple_class
 	    }
         }
 
-	bool operator = (const Dice &other) const
+	bool operator == (const Dice &other) const //сравнивать только значения без вероятностей
 	{
 		if (this->value == other.value)
+		{
+			for (int i=0; i<6; i++)
+			{
+				if (this->probabilities[i] != other.probabilities[i])
+					return false;
+			}
 			return true;
+		}
 		return false;
 	}
 
@@ -111,12 +120,17 @@ namespace simple_class
             return this->probabilities[num-1];
         }
 
-        void set_state() //ввод состояния класса через входной поток
+        void set_state() //ввод состояния класса через входной поток (передача потока в аргументы функции)
         {
+		try
+		{
             	std::cout << "Enter dropped value of dice:\n";
         	int val = getNum<int>(1,6);
         	this->value = val;
         	double sum = 1.0;
+		while (sum > 0.0)
+		{
+		sum = 1.0;
         	for (int i=0; i<6; i++)
         	{
                 	std::cout << "Enter probability of dropping number #" << (i+1) << ":\n";
@@ -124,9 +138,19 @@ namespace simple_class
 			this->probabilities[i] = cur;
                 	sum -= cur;
         	}
+		if (sum > 0.0)
+		{
+			std :: cout << "Sum of probabilities must be equal to 1.0. Repeat, pleace\n";
+		}
+		}
+		}
+		catch(...)
+		{
+			throw;
+		}
         }
 
-	void ascii_art()
+	void ascii_art() //формирование строки(!) и ее вывод (должна возвращать string)
 	{
 		std::cout << ".-------.\n";
 		std::cout << "|       |\n";
@@ -158,7 +182,7 @@ namespace simple_class
 		std::cout << "'-------'\n";
 	}
 
-        void print() //вывод состояния игральной кости
+        void print() //вывод состояния игральной кости (переадча потока в аргументы)
         {
             std::cout << "Current value of dice: " << this->value << std::endl;
             for (int i = 0; i<6; i++)
