@@ -22,7 +22,7 @@ int main()
 		if (rc == 5)
 		{
 			Dice second;
-			second.set_state();
+			second.set_state(std::cin, std::cout);
 			D_Compare(d, second) == 1 ? std::cout<<"Dices are equal\n" : std::cout<<"Dices aren't equal\n";
 		}
 		else
@@ -37,83 +37,37 @@ int main()
 
 int D_Compare (Dice &a, Dice &b)
 {
-	try
-	{
 		return a==b ? 1 : 0;
-	}
-	catch(...)
-	{
-		throw;
-	}
-	return 1;
 }
 
 int D_Art (Dice &d)
 {
-	try
-	{
-		d.ascii_art();
-	}
-	catch(...)
-	{
-		throw;
-		return 0;
-	}
+	std::string res = d.ascii_art();
 	return 1;
 }
 
 int D_Print (Dice &d)
 {
-	try
-	{
-		d.print();
-	}
-	catch(...)
-	{
-		throw;
-		return 0;
-	}
+	d.print(std::cout);
 	return 1;
 }
 
 int D_Generation_based_on_probabilities (Dice &d)
 {
-	try
-	{
-		d.generate_random_value();
-	}
-	catch(...)
-	{
-		throw;
-		return 0;
-	}
+	d.generate_random_value();
 	return 1;
 }
 
 int D_Random_Value (Dice &d)
 {
-	try
-	{
-	 	d.set_random();
-	}
-	catch(...)
-	{
-		return 0;
-	}
+	Dice new_instance;
+	d = new_instance;
 	return 1;
 }
 
 int D_Init (Dice &d)
 {
-	try
-	{
-		d.set_state();
-	}
-	catch(...)
-	{
-		throw;
-		return 0;
-	}
+	d.set_state(std::cin, std::cout);
 	return 1;
 }
 
@@ -129,7 +83,7 @@ int invite()
 	int rc;
 	try
 	{
-        	rc = getNum<int>(0,5);
+        	rc = getNum<int>(std::cin, std::cout, 0,5);
 	}
 	catch(...)
 	{

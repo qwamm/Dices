@@ -11,17 +11,17 @@
 namespace simple_class
 {
     template <class T>
-    T getNum(T min = std::numeric_limits<T>::min(), T max = std::numeric_limits<T>::max())
+    T getNum(std::istream &in, std::ostream &out, T min = std::numeric_limits<T>::min(), T max = std::numeric_limits<T>::max())
     {
         T a;
         while (true)
         {
-            std:: cin >> a;
-            if (std::cin.eof()) //конец файла
+            in >> a;
+            if (in.eof()) //конец файла
                 throw std::runtime_error("Failed to read number: EOF");
-            else if (std::cin.bad()) //невосстановимая ошибка входного потока
+            else if (in.bad()) //невосстановимая ошибка входного потока
                 throw  std::runtime_error(std::string("Failed to read number") + strerror(errno));
-            else if (std::cin.fail()) {
+            else if (in.fail()) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std:: cout<<"You are wrong, repeat please!"<<std::endl;
@@ -29,7 +29,7 @@ namespace simple_class
             else if (a>=min && a<=max)
                 return a;
 	    else
-		std:: cout << "You are wrong! Repeat, please\n";
+		out << "You are wrong! Repeat, please\n";
         }
     }
 
@@ -37,165 +37,72 @@ namespace simple_class
     class Dice
     {
     private:
-        int value;
-        double probabilities[6]; //static параметр
+        int value; //выпавшее значение
+        double *probabilities; //веряотности
+	int size; //кол-во граней кубика
     public:
-        Dice() //конструктор по умолчанию (передавать выпавшее занчение) (инициализация перед основным конструктором вместо
-        {
-            this->value = 3;
-            for (int i=0; i<6; i++)
-            {
-                this->probabilities[i] = 1.0/6.0;
-            }
-        }
-
-        Dice (const int &cur_value, const double arr[6])
+        Dice (const int cur_value, const int cur_size, const double *&arr)
         {
             value = cur_value;
-            std::copy(arr, arr+6, probabilities);
+	    size = cur_size;
+            std::copy(arr, arr+cur_size, probabilities);
             std::cout << "The dice was created" << std::endl;
         }
+
+        Dice (const int cur_size)
+        {
+                srand(time(nullptr));
+                this->size = cur_size;
+                this->value = rand()%cur_size + 1;
+                this->probabilities = new double[cur_size];
+                for (int i=0; i<cur_size; i++)
+                {
+                        this->probabilities[i] = 1.0 / (double) cur_size;
+                }
+        }
+
+        Dice () : Dice(6) //конструктор по умолчанию (передавать выпавшее занчение) (инициализация перед основным конструктором вм>
+        {
+        	std::cout << "Default constructor was activated" << std::endl;
+        }
+
         ~Dice()
         {
+	    delete[] probabilities;
             std::cout << "The dice was deleted" << std::endl;
         }
+
         void set_val (const int &cur_value) //изменение текущего значения игральной кости (сеттеры и геттеры должны переместиться в cpp-фвйл)
-        {
-            this->value = cur_value;
-        }
-        void set_probability_of_dropping (const double p, const int num) //изменение значения вероятности выпадения числа
-        {
-            this->probabilities[num-1] = p;
-        }
-        int get_val() //изменение текущего значения игральной кости
-        {
-            return this->value;
-        }
-
-        void set_random() //переделать в виде конструктора
-        {
-            srand(time(nullptr));
-            this->value = rand()%6;
-            for (int i=0; i<6; i++)
-            {
-                this->probabilities[i] = 1.0/6.0;
-            }
-        }
-
-        void generate_random_value() //генерация рандомного значения игральной кости с учетом вероятностей
-        {
-            srand(time(nullptr));
-	    int p = rand()%101;
-	    double cnt = (int) (this->probabilities[0]*100);
-	    for (int i = 0; i<6; i++)
-	    {
-		if (this->probabilities[i] != 0 && cnt > p)
-		{
-			this->value = i + 1;
-			break;
-		}
-		else if (i < 5)
-		{
-			cnt += (int) (this->probabilities[i+1]*100);
-		}
-	    }
-        }
-
-	bool operator == (const Dice &other) const //сравнивать только значения без вероятностей
 	{
-		if (this->value == other.value)
-		{
-			for (int i=0; i<6; i++)
-			{
-				if (this->probabilities[i] != other.probabilities[i])
-					return false;
-			}
-			return true;
-		}
-		return false;
+            this->value = cur_value;
 	}
 
-        double get_probability(int num) //изменение значения вероятности выпадения числа
+        void set_probability_of_dropping (const double p, const int num) //изменение значения вероятности выпадения числа
+	{
+            this->probabilities[num-1] = p;
+	}
+
+        int get_val() //изменение текущего значения игральной кости
+	{
+            return this->value;
+	}
+
+	double get_probability(int num) //изменение значения вероятности выпадения числа
         {
             return this->probabilities[num-1];
         }
 
-        void set_state() //ввод состояния класса через входной поток (передача потока в аргументы функции)
-        {
-		try
-		{
-            	std::cout << "Enter dropped value of dice:\n";
-        	int val = getNum<int>(1,6);
-        	this->value = val;
-        	double sum = 1.0;
-		while (sum > 0.0)
-		{
-		sum = 1.0;
-        	for (int i=0; i<6; i++)
-        	{
-                	std::cout << "Enter probability of dropping number #" << (i+1) << ":\n";
-                	double cur = getNum<double>(0,sum);
-			this->probabilities[i] = cur;
-                	sum -= cur;
-        	}
-		if (sum > 0.0)
-		{
-			std :: cout << "Sum of probabilities must be equal to 1.0. Repeat, pleace\n";
-		}
-		}
-		}
-		catch(...)
-		{
-			throw;
-		}
-        }
+        void generate_random_value(); //генерация рандомного значения игральной кости с учетом вероятностей
 
-	void ascii_art() //формирование строки(!) и ее вывод (должна возвращать string)
-	{
-		std::cout << ".-------.\n";
-		std::cout << "|       |\n";
-		if (this->value == 1)
-		{
-			std::cout << "|   *   |\n";
-		}
-		else if (this->value == 2)
-		{
-                        std::cout << "|  **   |\n";
-		}
-		else if (this->value == 3)
-		{
-                        std::cout << "|  ***  |\n";
-		}
-		else if (this->value == 4)
-		{
-			std::cout << "| ****  |\n";
-		}
-		else if (this->value == 5)
-		{
-			std::cout << "| ***** |\n";
-		}
-		else if (this->value == 6)
-		{
-			std::cout << "| ******|\n";
-		}
- 		std::cout << "|       |\n";
-		std::cout << "'-------'\n";
-	}
+	bool operator == (const Dice &other) const; //сравнивать только значения без вероятностей
 
-        void print() //вывод состояния игральной кости (переадча потока в аргументы)
-        {
-            std::cout << "Current value of dice: " << this->value << std::endl;
-            for (int i = 0; i<6; i++)
-            {
-                std::cout << "Probability of dropping value " << (i+1) << ": " << this->probabilities[i] << std::endl;
-            }
-        }
+        void set_state(std::istream &in, std::ostream &out); //ввод состояния класса через входной поток (передача потока в аргументы функции)
+
+	std::string ascii_art(); //формирование строки(!) и ее вывод (должна возвращать string)
+
+        void print(std::ostream &c); //вывод состояния игральной кости (переадча потока в аргументы)
     };
 
-   //int invite();
-   //int D_Create(Dice &d);
-
-   //void D_Create();
 }
 
 #endif //LAB2_SIMPLE_CLASS_H
