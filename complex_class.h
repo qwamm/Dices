@@ -7,33 +7,59 @@
 
 namespace complex_class
 {
-    /*template <class T>
-    T getNum(std::istream &in, std::ostream &out, T min = std::numeric_limits<T>::min(), T max = std::numeric_limits<T>>    {
-        T a;
-        while (true)
-        {
-            in >> a;
-            if (in.eof()) //конец файла
-                throw std::runtime_error("Failed to read number: EOF");
-            else if (in.bad()) //невосстановимая ошибка входного потока
-                throw  std::runtime_error(std::string("Failed to read number") + strerror(errno));
-            else if (in.fail()) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std:: cout<<"You are wrong, repeat please!"<<std::endl;
-            }
-            else if (a>=min && a<=max)
-                return a;
-            else
-                out << "You are wrong! Repeat, please\n";
-        }
-    }*/
-
 	class Dices
 	{
 		private:
 		 	simple_class::Dice *arr; //массив игральных костей
-			int size; //размер массива
+			int arr_size; //размер массива
+        public:
+            Dices(int honest) //инициализаця массива кол-вом честных костей с заполнением их случайными числами
+            {
+                this->arr_size = honest;
+                this->arr = new simple_class::Dice[this->arr_size];
+                for (int i=0; i < this->arr_size; i++)
+                {
+                    simple_class::Dice x;
+                    this->arr[i] = x;
+                }
+            }
+
+            Dices (int honest, int *values) //инициализация массива кол-вом честных костей и массивом их значений
+            {
+                this->arr_size = honest;
+                this->arr = new simple_class::Dice[this->arr_size];
+                for (int i=0; i < this->arr_size; i++)
+                {
+                    this->arr[i].set_val(values[i]);
+                }
+            }
+
+            Dices() : Dices(0) {}
+
+            ~Dices()
+            {
+                std::cout << "Group of dices was destroyed\n";
+            }
+
+            void print()
+            {
+                for (int j=0; j<this->arr_size; j++)
+                {
+                    this->arr[j].print(std::cout);
+                }
+            }
+
+            bool check(int num) //проверка, есть ли кость с заданным номером в массиве
+            {
+                for (int i=0; i< this->arr_size; i++)
+                {
+                    if (this->arr[i].get_val() == num)
+                    {
+                                return true;
+                    }
+                }
+                return false;
+            }
 	};
 }
 

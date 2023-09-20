@@ -5,5 +5,6 @@ using namespace complex_class;
 
 int main()
 {
-	Dices obj;
+	Dices obj(7);
+	obj.print();
 }
