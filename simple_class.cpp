@@ -14,13 +14,11 @@ void Dice::print(std::ostream &c) //вывод состояния игральн
 
 void Dice::set_state(std::istream &in, std::ostream &out) //ввод состояния класса через входной поток (передача потока в аргументы функции)
 {
-                try
-                {
                 	out << "Enter dropped value of dice:\n";
                 	int val = getNum<int>(std::cin, std::cout,1,6);
                 	this->value = val;
-                	double sum = 1.0;
-                	while (sum > 0.0)
+                	double sum = 1.0, epsilon = 0.000000001;
+                	while (sum > epsilon)
                 	{
                 		sum = 1.0;
                 		for (int i=0; i<6; i++)
@@ -29,17 +27,14 @@ void Dice::set_state(std::istream &in, std::ostream &out) //ввод состо�
                         		double cur = getNum<double>(std::cin, std::cout, 0,sum);
                         		this->probabilities[i] = cur;
                         		sum -= cur;
+					out << sum << "\n";
                 		}
-                		if (sum > 0.0)
+                		if (sum > epsilon)
                 		{
+					out << sum << "\n";
                         		out << "Sum of probabilities must be equal to 1.0. Repeat, pleace\n";
                 		}
                 	}
-                }
-                catch(...)
-                {
-                        throw;
-                }
 }
 
 void Dice::generate_random_value() //генерация рандомного значения игральной кости с учетом вероятностей
@@ -65,11 +60,6 @@ bool Dice::operator == (const Dice &other) const //сравнивать толь
 {
                 if (this->value == other.value)
                 {
-                        for (int i=0; i<6; i++)
-                        {
-                                if (this->probabilities[i] != other.probabilities[i])
-                                        return false;
-                        }
                         return true;
                 }
                 return false;

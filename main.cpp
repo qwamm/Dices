@@ -43,6 +43,16 @@ int D_Compare (Dice &a, Dice &b)
 int D_Art (Dice &d)
 {
 	std::string res = d.ascii_art();
+	//int c = 9;
+	for (int i=0; i < res.length(); i++)
+	{
+		if (i>=9 && i%9 == 0)
+		{
+			std :: cout << "\n";
+		}
+			std :: cout << res[i];
+	}
+	std::cout << "\n";
 	return 1;
 }
 
@@ -81,14 +91,6 @@ int invite()
         std::cout << " 4. ASCII-art\n";
         std::cout << " 5. Compare two dices\n";
 	int rc;
-	try
-	{
-        	rc = getNum<int>(std::cin, std::cout, 0,5);
-	}
-	catch(...)
-	{
-		throw;
-		return 0;
-	}
+        rc = getNum<int>(std::cin, std::cout, 0,5);
         return rc;
 }
