@@ -43,7 +43,6 @@ int D_Compare (Dice &a, Dice &b)
 int D_Art (Dice &d)
 {
 	std::string res = d.ascii_art();
-	//int c = 9;
 	for (int i=0; i < res.length(); i++)
 	{
 		if (i>=9 && i%9 == 0)
@@ -70,8 +69,8 @@ int D_Generation_based_on_probabilities (Dice &d)
 
 int D_Random_Value (Dice &d)
 {
-	Dice new_instance;
-	d = new_instance;
+	//Dice new_instance;
+	d = Dice();
 	return 1;
 }
 
