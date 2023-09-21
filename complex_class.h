@@ -17,11 +17,6 @@ namespace complex_class
             {
                 this->arr_size = honest;
                 this->arr = new simple_class::Dice[this->arr_size];
-                for (int i=0; i < this->arr_size; i++)
-                {
-                    simple_class::Dice x;
-                    this->arr[i] = x;
-                }
             }
 
             Dices (int honest, int *values) //инициализация массива кол-вом честных костей и массивом их значений
@@ -41,25 +36,10 @@ namespace complex_class
                 std::cout << "Group of dices was destroyed\n";
             }
 
-            void print()
-            {
-                for (int j=0; j<this->arr_size; j++)
-                {
-                    this->arr[j].print(std::cout);
-                }
-            }
-
-            bool check(int num) //проверка, есть ли кость с заданным номером в массиве
-            {
-                for (int i=0; i< this->arr_size; i++)
-                {
-                    if (this->arr[i].get_val() == num)
-                    {
-                                return true;
-                    }
-                }
-                return false;
-            }
+            bool operator += (simple_class::Dice &obj) const;
+            bool check(int num); //проверка, есть ли кость с заданным номером в массиве
+            int sum(); //подсчет суммы очков в группе костей
+            void print(); //вывод характеристик каждой кости из группы игральных костей
 	};
 }
 

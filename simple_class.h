@@ -39,12 +39,12 @@ namespace simple_class
     private:
         int value; //выпавшее значение
         double *probabilities; //веряотности
-	int size; //кол-во граней кубика
+	    int size; //кол-во граней кубика
     public:
         Dice (const int cur_value, const int cur_size, const double *&arr)
         {
             value = cur_value;
-	    size = cur_size;
+	        size = cur_size;
             std::copy(arr, arr+cur_size, probabilities);
             std::cout << "The dice was created" << std::endl;
         }
@@ -55,7 +55,7 @@ namespace simple_class
                 this->size = cur_size;
                 this->value = rand()%cur_size + 1;
                 this->probabilities = new double[cur_size];
-                for (int i=0; i<cur_size; i++)
+                for (int i = 0; i < cur_size; i++)
                 {
                         this->probabilities[i] = 1.0 / (double) cur_size;
                 }
@@ -68,14 +68,14 @@ namespace simple_class
 
         ~Dice()
         {
-	    delete[] probabilities;
+	       delete[] probabilities;
             std::cout << "The dice was deleted" << std::endl;
         }
 
         void set_val (const int &cur_value) //изменение текущего значения игральной кости (сеттеры и геттеры должны переместиться в cpp-фвйл)
-	{
+	    {
             this->value = cur_value;
-	}
+	    }
 
         void set_probability_of_dropping (const double p, const int num) //изменение значения вероятности выпадения числа
 	{
