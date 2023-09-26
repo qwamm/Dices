@@ -39,19 +39,26 @@ namespace simple_class
     private:
         int value; //выпавшее значение
         double *probabilities; //веряотности
-	    int size; //кол-во граней кубика
+	int size; //кол-во граней кубика
     public:
+	Dice (const Dice &d)
+	{
+		this->size = d.size;
+		this->value = d.value;
+		this->probabilities = new double[this->size];
+		std::copy(d.probabilities, d.probabilities + d.size, this->probabilities);
+	}
         Dice (const int cur_value, const int cur_size, const double *&arr)
         {
             value = cur_value;
-	        size = cur_size;
+	    size = cur_size;
             std::copy(arr, arr+cur_size, probabilities);
-            std::cout << "The dice was created" << std::endl;
+            //std::cout << "The dice was created" << std::endl;
         }
 
-        Dice (const int cur_size)
+        explicit Dice (const int cur_size)
         {
-                srand(time(nullptr));
+                //srand(time(nullptr));
                 this->size = cur_size;
                 this->value = rand()%cur_size + 1;
                 this->probabilities = new double[cur_size];
@@ -63,23 +70,28 @@ namespace simple_class
 
         Dice () : Dice(6) //конструктор по умолчанию (передавать выпавшее занчение) (инициализация перед основным конструктором вм>
         {
-        	std::cout << "Default constructor was activated" << std::endl;
+        	//std::cout << "Default constructor was activated" << std::endl;
         }
 
         ~Dice()
         {
 	       delete[] probabilities;
-            std::cout << "The dice was deleted" << std::endl;
+               //std::cout << "The dice was deleted" << std::endl;
         }
 
         void set_val (const int &cur_value) //изменение текущего значения игральной кости (сеттеры и геттеры должны переместиться в cpp-фвйл)
-	    {
+	{
             this->value = cur_value;
-	    }
+	}
 
         void set_probability_of_dropping (const double p, const int num) //изменение значения вероятности выпадения числа
 	{
             this->probabilities[num-1] = p;
+	}
+
+	void set_size (int sz)
+	{
+		this->size = sz;
 	}
 
         int get_val() //изменение текущего значения игральной кости
@@ -91,6 +103,11 @@ namespace simple_class
         {
             return this->probabilities[num-1];
         }
+
+	int get_size()
+	{
+		return this->size;
+	}
 
         void generate_random_value(); //генерация рандомного значения игральной кости с учетом вероятностей
 

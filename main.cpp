@@ -11,14 +11,16 @@ int D_Art (Dice &d);
 int D_Print (Dice &d);
 int D_Compare (Dice &a, Dice &b);
 
-int (*f[])(Dice&) = {NULL, D_Init, D_Random_Value, D_Generation_based_on_probabilities, D_Art};
+int (*f[])(Dice&) = {NULL, D_Init, D_Random_Value, D_Generation_based_on_probabilities, D_Art, D_Print};
 
 int main()
 {
+    srand(time(nullptr));
     int rc;
-    Dice d;
+    Dice d = 5;
+    D_Print(d);
     while (rc = invite())
-	{
+    {
 		if (rc == 5)
 		{
 			Dice second;
@@ -27,11 +29,22 @@ int main()
 		}
 		else
 		{
+			if (rc == 6)
+				rc--;
+			/*if (rc == 2)
+			{
+				d.~Dice();
+				Dice x;
+				d = x;
+				D_Print(d);
+			}*/
 			if (!f[rc](d))
+			{
                 		break;
+			}
 		}
-	}
-    D_Print(d);
+    }
+    //D_Print(d);
     std::cout<<"That's all. Good luck!\n";
 }
 
@@ -69,8 +82,12 @@ int D_Generation_based_on_probabilities (Dice &d)
 
 int D_Random_Value (Dice &d)
 {
-	//Dice new_instance;
-	d = Dice();
+	Dice x;
+	d.set_val(x.get_val());
+	for (int i=0; i<6; i++)
+	{
+		d.set_probability_of_dropping(1.0 / 6.0, i+1);
+	}
 	return 1;
 }
 
@@ -89,7 +106,9 @@ int invite()
         std::cout << " 3. Generating a random value for a dice based on probability\n";
         std::cout << " 4. ASCII-art\n";
         std::cout << " 5. Compare two dices\n";
+	std::cout << " 6. Print\n";
+
 	int rc;
-        rc = getNum<int>(std::cin, std::cout, 0,5);
+        rc = getNum<int>(std::cin, std::cout, 0,6);
         return rc;
 }

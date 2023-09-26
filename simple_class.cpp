@@ -6,7 +6,7 @@ using namespace simple_class;
 void Dice::print(std::ostream &c) //вывод состояния игральной кости (переадча потока в аргументы)
 {
             c << "Current value of dice: " << this->value << std::endl;
-            for (int i = 0; i<6; i++)
+            for (int i = 0; i < this->size; i++)
             {
                 c << "Probability of dropping value " << (i+1) << ": " << this->probabilities[i] << std::endl;
             }
@@ -14,17 +14,20 @@ void Dice::print(std::ostream &c) //вывод состояния игральн
 
 void Dice::set_state(std::istream &in, std::ostream &out) //ввод состояния класса через входной поток (передача потока в аргументы функции)
 {
+			out << "Enter number of faces of cube:\n";
+			int cur_size = getNum<int>(std::cin, std::cout, 0);
+			this->size = cur_size;
                 	out << "Enter dropped value of dice:\n";
-                	int val = getNum<int>(std::cin, std::cout,1,6);
+                	int val = getNum<int>(std::cin, std::cout,1,cur_size);
                 	this->value = val;
                 	double sum = 1.0, epsilon = 0.000000001;
                 	while (sum > epsilon)
                 	{
                 		sum = 1.0;
-                		for (int i=0; i<6; i++)
+                		for (int i=0; i<cur_size; i++)
                 		{
                         		out << "Enter probability of dropping number #" << (i+1) << ":\n";
-                        		double cur = getNum<double>(std::cin, std::cout, 0,sum);
+                        		double cur = getNum<double>(std::cin, std::cout, 0,sum + epsilon);
                         		this->probabilities[i] = cur;
                         		sum -= cur;
 					out << sum << "\n";
@@ -39,7 +42,7 @@ void Dice::set_state(std::istream &in, std::ostream &out) //ввод состо�
 
 void Dice::generate_random_value() //генерация рандомного значения игральной кости с учетом вероятностей
 {
-            srand(time(nullptr));
+            //srand(time(nullptr));
             int p = rand()%101;
             double cnt = (int) (this->probabilities[0]*100);
             for (int i = 0; i<6; i++)
