@@ -3,6 +3,16 @@
 
 using namespace simple_class;
 
+void Dice::resize(int sz)
+{
+        if (sz <= this->size)
+                return;
+        double *buf =  new double[sz];
+        std::copy(this->probabilities, this->probabilities + this->size, buf);
+        delete[] this->probabilities;
+        this->probabilities = buf;
+}
+
 void Dice::print(std::ostream &c) //вывод состояния игральной кости (переадча потока в аргументы)
 {
             c << "Current value of dice: " << this->value << std::endl;

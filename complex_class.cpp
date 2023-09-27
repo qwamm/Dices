@@ -4,9 +4,9 @@
 
 using namespace complex_class;
 
-simple_class::Dice& Dices::operator [] (const int num)
+simple_class::Dice& Dices::operator [] (const int ind)
 {
-	simple_class::Dice &ref = this->arr[num-1];
+	simple_class::Dice &ref = this->arr[ind];
 	return ref;
 }
 
@@ -90,6 +90,7 @@ bool Dices::operator += (simple_class::Dice &obj)
 	}
 	this->arr[this->arr_size].set_size(obj.get_size());
 	this->arr[this->arr_size].set_val(obj.get_val());
+	this->arr[this->arr_size].resize(obj.get_size());
 	for (int i=0; i < obj.get_size(); i++)
 	{
 		this->arr[this->arr_size].set_probability_of_dropping(obj.get_probability(i+1), i+1);

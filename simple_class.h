@@ -75,7 +75,11 @@ namespace simple_class
 
         ~Dice()
         {
-	       delete[] probabilities;
+		if (probabilities != nullptr)
+		{
+	        	delete[] probabilities;
+			probabilities = nullptr;
+		}
                //std::cout << "The dice was deleted" << std::endl;
         }
 
@@ -108,6 +112,8 @@ namespace simple_class
 	{
 		return this->size;
 	}
+
+	void resize (int sz); //изменение размера вектора вероятностей
 
         void generate_random_value(); //генерация рандомного значения игральной кости с учетом вероятностей
 

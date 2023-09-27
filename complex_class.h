@@ -42,7 +42,7 @@ namespace complex_class
 
             bool operator += (simple_class::Dice &obj); //прибавление кости с заданным номером к группе
 	    bool operator -= (simple_class::Dice &obj); //удаление кости из группы костей
-	    simple_class::Dice& operator [] (const int num);
+	    simple_class::Dice& operator [] (const int ind);
 	    bool operator () (); //подбросить кости
 	    bool operator () (int num); //подбросить кость с заданным номером
             bool check(int num); //проверка, есть ли кость с заданным номером в массиве
