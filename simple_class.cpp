@@ -27,6 +27,7 @@ void Dice::set_state(std::istream &in, std::ostream &out) //ввод состо�
 			out << "Enter number of faces of cube:\n";
 			int cur_size = getNum<int>(std::cin, std::cout, 0);
 			this->size = cur_size;
+			this->probabilities = new double[cur_size];
                 	out << "Enter dropped value of dice:\n";
                 	int val = getNum<int>(std::cin, std::cout,1,cur_size);
                 	this->value = val;
