@@ -32,7 +32,7 @@ bool Dices::operator -= (simple_class::Dice &obj)
 	bool cond = false;
 	for (int i=0; i < this->arr_size; i++)
 	{
-		if (obj.get_val() == this->arr[i].get_val())
+		while (obj.get_val() == this->arr[i].get_val())
 		{
 			this->arr[i].~Dice();
 			this->arr[i] = this->arr[this->arr_size - 1];
@@ -88,14 +88,15 @@ bool Dices::operator += (simple_class::Dice &obj)
 	{
 		return false;
 	}
-	this->arr[this->arr_size].set_size(obj.get_size());
 	this->arr[this->arr_size].set_val(obj.get_val());
 	this->arr[this->arr_size].resize(obj.get_size());
+	this->arr[this->arr_size].set_size(obj.get_size());
 	for (int i=0; i < obj.get_size(); i++)
 	{
 		this->arr[this->arr_size].set_probability_of_dropping(obj.get_probability(i+1), i+1);
 	}
 	(this->arr_size) ++;
+	obj.~Dice();
 	return true;
 }
 

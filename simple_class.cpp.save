@@ -5,12 +5,12 @@ using namespace simple_class;
 
 void Dice::resize(int sz)
 {
-        if (sz <= this->size)
-                return;
-        double *buf =  new double[sz];
-        std::copy(this->probabilities, this->probabilities + this->size, buf);
-        delete[] this->probabilities;
-        this->probabilities = buf;
+	if (sz <= this->size)
+		return;
+	double *buf =  new double[sz];
+	std::copy(this->probabilities, this->probabilities + this->size, buf);
+	delete[] this->probabilities;
+	this->probabilities = buf;
 }
 
 void Dice::print(std::ostream &c) //вывод состояния игральной кости (переадча потока в аргументы)
@@ -27,8 +27,6 @@ void Dice::set_state(std::istream &in, std::ostream &out) //ввод состо�
 			out << "Enter number of faces of cube:\n";
 			int cur_size = getNum<int>(std::cin, std::cout, 0);
 			this->size = cur_size;
-			delete[] this->probabilities;
-			this->probabilities = new double[cur_size];
                 	out << "Enter dropped value of dice:\n";
                 	int val = getNum<int>(std::cin, std::cout,1,cur_size);
                 	this->value = val;

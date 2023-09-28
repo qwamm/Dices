@@ -38,6 +38,7 @@ int main()
 				simple_class::Dice obj;
 				obj.set_state(std::cin, std::cout);
 				D_Add(g, obj);
+				//obj.~Dice();
 				break;
 			}
 			case 4:
