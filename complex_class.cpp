@@ -34,8 +34,14 @@ bool Dices::operator -= (simple_class::Dice &obj)
 	{
 		while (obj.get_val() == this->arr[i].get_val())
 		{
-			this->arr[i].~Dice();
-			this->arr[i] = this->arr[this->arr_size - 1];
+			this->arr[i].set_val(this->arr[this->arr_size - 1].get_val());
+			this->arr[i].resize(this->arr[this->arr_size - 1].get_size());
+			this->arr[i].set_size(this->arr[this->arr_size - 1].get_size());
+			for (int j=0; j < this->arr[this->arr_size - 1].get_size(); j++)
+        		{
+                		this->arr[i].set_probability_of_dropping(this->arr[this->arr_size - 1].get_probability(j+1), j+1);
+        		}
+			//this->arr[i] = this->arr[this->arr_size - 1];
 			(this->arr_size)--;
 			cond = true;
 		}
